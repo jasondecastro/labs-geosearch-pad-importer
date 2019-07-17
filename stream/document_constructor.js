@@ -13,6 +13,7 @@ var peliasLogger = require( 'pelias-logger' ).get( 'nycpad' );
 
 module.exports = function(){
   var i = 0;
+  var titleCase = (str) => str ? str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()) : '';
   var stream = through.obj( function( item, enc, next ) {
 
     try {
@@ -40,7 +41,7 @@ module.exports = function(){
       // set address parts
       doc.address_parts = {
         number: item.houseNum,
-        street: item.stname,
+        street: item.stname ? titleCase(item.stname) : item.stname,
         zip: item.zipcode
       };
 
@@ -51,7 +52,13 @@ module.exports = function(){
         pad_bin: item.pad_bin,
         pad_bbl: item.pad_bbl,
         pad_geomtype: item.pad_geomtype,
-        pad_orig_stname: item.pad_orig_stname
+        pad_orig_stname: item.pad_orig_stname,
+        pad_condo_low: item.pad_condo_low,
+        pad_condo_high: item.pad_condo_high,
+        pad_condo_flag: item.pad_condo_flag,
+        pad_condo_num: item.pad_condo_num,
+        pad_coop_num: item.pad_coop_num,
+        pad_vacant: item.pad_vacant
       };
 
       // Push instance of Document downstream
